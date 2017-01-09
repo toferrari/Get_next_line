@@ -6,53 +6,45 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/11 15:50:45 by tferrari          #+#    #+#             */
-/*   Updated: 2017/01/08 13:18:04 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/01/09 15:51:46 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft.h"
-#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 int		get_next_line(const int fd, char **line)
 {
-	static char *rest;
-	int ret;
-	char buff[BUFF_SIZE];
-	int i;
+	static char	*rest;
+	int			ret;
+	char		buff[BUFF_SIZE];
+	char		*str;
+	int			i;
 
-	i = 0;
-	if (fd == -1)
-		return (GNL_error);
 	ret = read(fd, buff, BUFF_SIZE);
-	ft_putendl("a");
-	if (ret == 0)
-		return (GNL_end);
-	if (!(*line = ft_memalloc(BUFF_SIZE + 1)))
-		return (0);
-	ft_putendl("b");
-	/*ft_putnbr(BUFF_SIZE);
-	ft_putchar('\n');*/
-	while (buff[i] != '\n' && buff[i])
+	if (rest != NULL)
 	{
-		ft_putchar(*line[i]);
-		ft_putchar('\n');
-		*line[i] = buff[i];
+		str = ft_strnew(BUFF_SIZE + ft_strlen(rest));
+		str = ft_strcat(buff, rest);
+		ft_putendl(buff);
+	}
+	else
+		str = ft_strnew(BUFF_SIZE);
+	str = buff;
+	str[ret] = '\0';
+	i = 0;
+	*line = ft_strnew(BUFF_SIZE);
+	while (str[i] != '\n' && str[i])
+	{
+		(*line)[i] = str[i];
 		i++;
 	}
-	ft_putendl("c");
-
-	if (buff[i] == '\n')
+	if (i < BUFF_SIZE)
 	{
-		ft_putendl("d");
-		if (!(rest = ft_memalloc(BUFF_SIZE - i + 1)))
-			return (0);
-		rest = ft_strcpy(rest, (const char *)buff + i);
+		rest = ft_strnew(BUFF_SIZE - i);
+		ft_strcpy(rest, str + (i + 1));
 	}
-	ft_putendl("d");
-	if (rest[0])
-		ft_putendl(rest);
 	return (1);
 }

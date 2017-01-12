@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/06 15:53:09 by tferrari          #+#    #+#             */
-/*   Updated: 2017/01/12 14:30:25 by tferrari         ###   ########.fr       */
+/*   Created: 2016/11/23 16:15:14 by tferrari          #+#    #+#             */
+/*   Updated: 2016/11/24 10:15:00 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 5
-# define GNL_error -1
-# define GNL_end 0
+void	ft_putnbr(int n)
+{
+	long	nb;
 
-int		get_next_line(const int fd, char **line);
-
-#endif
+	nb = (long)n;
+	if (nb < 0)
+	{
+		nb = -nb;
+		ft_putchar('-');
+	}
+	if (nb <= 9)
+		ft_putchar(nb + '0');
+	else
+	{
+		ft_putnbr(nb / 10);
+		ft_putnbr(nb % 10);
+	}
+}

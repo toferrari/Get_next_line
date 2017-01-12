@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tferrari <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/06 15:53:09 by tferrari          #+#    #+#             */
-/*   Updated: 2017/01/12 14:30:25 by tferrari         ###   ########.fr       */
+/*   Created: 2016/11/02 19:37:12 by tferrari          #+#    #+#             */
+/*   Updated: 2016/11/02 19:37:22 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 5
-# define GNL_error -1
-# define GNL_end 0
+void	ft_putstr(char const *s)
+{
+	int	i;
 
-int		get_next_line(const int fd, char **line);
-
-#endif
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar((char)s[i]);
+		i++;
+	}
+}

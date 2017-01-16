@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/08 13:14:57 by tferrari          #+#    #+#             */
-/*   Updated: 2017/01/12 15:17:08 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/01/16 15:48:22 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,20 @@
 #include "libft.h"
 #include <fcntl.h>
 
-int main(int argc, char ** argv)
+int	main(int argc, char **argv)
 {
-	char *line;
-	int fd;
-	if (argc)
-		;
-	int i;
-	int ret;
+	char	*line;
+	int		fd;
+	int		i;
+	int		ret;
 
 	i = 1;
-
+	if (argc)
+		;
 	fd = open(argv[1], O_RDONLY);
-	/*if (get_next_line(fd, &line) == 1)
-		ft_putendl(line);*/
 	while ((ret = get_next_line(fd, &line)) == 1)
 	{
-		/*ft_putstr("line ");
-		ft_putnbr(i);
-		ft_putendl(" :");*/
-		ft_putendl(line);
-		/*ft_putstr("nb lettre = ");
-		ft_putnbr(ft_strlen(line));
-		ft_putendl("\n");*/
+		ft_putstr(line);
 		free(line);
 		i++;
 	}

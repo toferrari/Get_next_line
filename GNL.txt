@@ -1,5 +1,1 @@
-salut
-comment vas tu
-?
-hier j'ai mager une pomme
-et 10 bieres.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in leo dignissim, gravida leo id, imperdiet urna. Aliquam magna nunc, maximus quis eleifend et, scelerisque non dolor. Suspendisse augue augue, tempus

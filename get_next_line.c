@@ -6,14 +6,66 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/11 15:50:45 by tferrari          #+#    #+#             */
-/*   Updated: 2017/01/13 16:27:34 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/01/16 15:06:42 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "get_next_line.h"
 #include "libft.h"
-#include <stdlib.h>
-#include <stdio.h>
+
+int		ft_realloc(char **rest)
+{
+	char		*tmp;
+
+	if (!(tmp = ft_strnew(ft_strlen(*rest))))
+		return (0);
+	tmp = ft_strcpy(tmp, *rest);
+	ft_memdel((void **)rest);
+	if (!(*rest = ft_strnew(ft_strlen(tmp) + BUFF_SIZE)))
+		return (0);
+	*rest = ft_strcpy(*rest, tmp);
+	ft_memdel((void **)&tmp);
+	tmp = NULL;
+	return (1);
+}
+
+char	*ft_fill_line(char **line, char **str, char *rest)
+{
+	int i;
+
+	i = 0;
+	*line = ft_strnew(ft_strlen(*str));
+	while ((*str)[i] && (*str)[i] != '\n')
+	{
+		(*line)[i] = (*str)[i];
+		i++;
+	}
+	(*line)[i] = '\0';
+	if ((*str)[i] == '\n')
+	{
+		i++;
+		ft_memdel((void **)&rest);
+		if (!(rest = ft_strdup(*str + i)))
+			return (NULL);
+	}
+	else
+	{
+		if (!(rest = ft_strdup(*str + i)))
+			return (NULL);
+	}
+	return (rest);
+}
+
+int		ft_free_rest(char **rest, char **str)
+{
+	ft_memdel((void **)rest);
+	ft_memdel((void **)str);
+	return (GNL_END);
+}
 
 int		get_next_line(const int fd, char **line)
 {
@@ -21,43 +73,24 @@ int		get_next_line(const int fd, char **line)
 	int			ret;
 	char		buff[BUFF_SIZE + 1];
 	char		*str;
-	int			i;
 
-	ret = read(fd, buff, BUFF_SIZE);
-	if (ret == 0 && rest == NULL)
-		return (GNL_end);
-	buff[ret] = '\0';
-	if (fd < 0 || ret < 0)
-		return (GNL_error);
-	if (rest == NULL)
+	(rest == NULL) ? rest = ft_strnew(1) : 0;
+	if (!(str = ft_strdup(rest)) || (fd < 0))
+		return (GNL_ERROR);
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		str = ft_strnew(BUFF_SIZE);
-		str = ft_strcpy(str, buff);
-	}
-	else
-	{
-		str = ft_strnew(ft_strlen(rest) + BUFF_SIZE);
-		str = ft_strcat(str, rest);
+		buff[ret] = '\0';
+		if (!(ft_realloc(&str)))
+			return (GNL_ERROR);
 		str = ft_strcat(str, buff);
+		if (ft_memchr(buff, '\n', BUFF_SIZE))
+			break ;
 	}
-	*line = ft_strnew(BUFF_SIZE);
-	i = 0;
-	while (str[i] != '\n' && str[i])
-	{
-		(*line)[i] = str[i];
-		i++;
-	}
-	(*line)[i] = '\0';
-	if (str[i] == '\n')
-		i++;
-	if (ret == 0 && rest == NULL)
-		return (GNL_end);
-	if (str[i])
-	{
-		rest = ft_strnew(ft_strlen(str + i));
-		rest = ft_strcpy(rest, str + i);
-	}
-	else
-		rest = NULL;
-	return (1);
+	if (ret < 0)
+		return (GNL_ERROR);
+	rest = ft_fill_line(line, &str, rest);
+	if (ret == 0 && ft_strcmp(str, rest) == 0)
+		return (ft_free_rest(&rest, &str));
+	ft_memdel((void **)&str);
+	return (GNL_OK);
 }
